@@ -1,18 +1,46 @@
 <template>
   <div class="q-pa-md">
-      <div class="text-h5 text-bold">Savings</div>
-       <Savings />
+      <div class="q-mt-xl">
+        <div class="row">
+           
+            <div class="col-md-6 offset-md-3 col-sm-12 col-xs-12">
+                <form>
+
+                        <div class="text-h4 text-primary text-center text-bold">Start a New Saving</div>
+                       <q-select class="q-mt-sm" v-model="investmentData.plan" :options="plans" label="Plan">
+                            <template v-slot:prepend>
+                            <q-icon name="category" />
+                            </template>
+                        </q-select>
+
+                        <q-select class="q-mt-sm" v-model="investmentData.product" :options="products" label="Desired Product">
+                            <template v-slot:prepend>
+                            <q-icon name="grain" />
+                            </template>
+                        </q-select>
+                        
+                        <div class="q-mt-sm">
+                            <div>
+                                <q-btn label="Submit" @click="createInvestment()"  no-caps class="q-px-lg" unelevated type="submit" color="primary"/>
+                            </div>
+                          <div class="text-body1 q-mt-sm"><small>Find out more about how it works <span class="text-primary text-bold cursor-pointer" @click="$router.push({ name: 'login'})">here</span></small></div>
+
+                        </div>
+                        
+                    </form>
+            </div>
+        </div>
+      </div>
   </div>
 </template>
 
 <script>
 import { mapGetters } from 'vuex'
-import { date } from 'quasar' 
-import paystack from 'vue-paystack'
-import Savings from 'src/components/common/savingsTable.vue'
+import {Notify} from 'quasar'
+
 export default {
     components: {
-        Savings,
+       
     },
     data () {
         return {
@@ -20,7 +48,14 @@ export default {
             full_name: null,
             email:null,
             showBag: false,
-
+            investmentData: {
+                paidAmount: null,
+                remainingAmount: null,
+                totalAmount: null,
+                isDue: false,
+                plan: null,
+                product: null
+            },
             transact: {
             amount: 0,
             description: "string",
@@ -37,12 +72,18 @@ export default {
             days: 1,
             profile: {
                 email: "ayuba@gmail.com"
-            }
+            },
+            options: [
+                'Basic', 'Standard', 'Premium'
+            ],
         }
     },
 
     computed: {
-       
+        ...mapGetters({
+            plans: 'plans',
+            products: 'products',
+        }),
         reference() {
             let text = "";
             let possible =
@@ -52,8 +93,49 @@ export default {
             return text;
             }
     },
-
+ 
     methods: {
+        async createInvestment(){
+            this.investmentData.plan = this.investmentData.plan.value
+            this.investmentData.product = this.investmentData.product.value
+            this.investmentData.user = [this.$store.getters.user.id]
+            
+            let plan = await this.$store.dispatch('getPlan',this.investmentData.plan)
+            let now = new Date();
+            let daysInMonth = 30//new Date(now.getFullYear(), now.getMonth()+1, 0).getDate();
+            let dueDate = now.setDate(now.getDate()+30)
+            console.log("Days in this month are>>>",daysInMonth,plan)
+            this.investmentData.totalAmount = plan.data.unitAmount * daysInMonth
+            this.investmentData.remainingAmount = plan.data.unitAmount * daysInMonth
+            this.investmentData.dueDate = dueDate;
+            console.log("THe Investment to be created is>>>",this.investmentData)
+            this.$store.dispatch('createInvestment',this.investmentData).then(investment=>{
+                console.log("Ivestment Added>>>",investment)
+                Notify.create({
+                    spinner: true,
+                    message: 'savings started successfully...',
+                    timeout: 2000,
+                    type:'positive'
+                })
+                this.$store.dispatch('refreshUser')
+                let self = this
+                // setTimeout(()=>{
+                //      self.$router.push("/savings")
+                // },2000)
+               
+            }).catch(error=>{  
+                    console.log("Error",error)
+                    if (error.response && error.response.status === 400) {
+                        this.errors = error.response.data.message[0].messages;
+                    }
+
+                // alert(this.errors[0].message)
+                Notify.create({message:this.errors[0].message,type:'negative',position:'top'})
+
+
+                })
+            
+        },
         processPayment: () => {
         alert("Payment recieved")
         },
@@ -139,9 +221,9 @@ export default {
     },
 
     mounted () {
-        // this.$store.dispatch('Auth/profile')
-        // this.$store.dispatch('Auth/plans')
-        // this.$store.dispatch('Auth/subscription')
+        this.$store.dispatch('plans')
+        this.$store.dispatch('products')
+
         // this.transact.paid_days = this.render()
 
     }

@@ -1,58 +1,56 @@
 <template>
   <div style="width: 100%; height: 100vh;">
       <section class="row items-center flex-center flex full-height full-width row">
-          <q-card flat tile class="bg-transparent col-md-5 q-px-xl q-py-lg">
+          <q-card flat tile bordered class="bg-accent col-md-5 q-px-xl q-py-lg">
             <q-card-section>
                 <div>
-                    <form @submit.prevent="register">
+                    <form>
+
                         <div class="text-h4 text-primary text-center text-bold">Create an account</div>
-                        <q-input class="q-mt-sm" placeholder="First Name" v-model="form.first_name">
+                        <q-input class="q-mt-sm" placeholder="Full Name" v-model="userData.username" >
                             <template v-slot:prepend>
                             <q-icon name="person" />
                             </template>
                         </q-input>
-                        <q-input class="q-mt-sm" placeholder="Last Name" v-model="form.last_name">
+                        <q-input class="q-mt-sm" placeholder="Email" v-model="userData.email">
                             <template v-slot:prepend>
-                            <q-icon name="person" />
+                            <q-icon name="email" />
                             </template>
                         </q-input>
-                        <q-input class="q-mt-sm" placeholder="Email" v-model="form.email">
+                        <q-input class="q-mt-sm" placeholder="Create Password" v-model="userData.password">
                             <template v-slot:prepend>
                             <q-icon name="lock" />
                             </template>
                         </q-input>
-                        <q-input class="q-mt-sm" placeholder="Phone Number" v-model="form.phone_number">
+                         <q-input class="q-mt-sm" placeholder="Comfirm Password" v-model="userData.passwordComfirmation">
                             <template v-slot:prepend>
                             <q-icon name="lock" />
                             </template>
                         </q-input>
-                        <q-input v-model="form.password" placeholder="Password" :type="isPwd ? 'password' : 'text'">
+                        <q-input class="q-mt-sm" placeholder="State" v-model="userData.state">
                             <template v-slot:prepend>
-                            <q-icon name="lock" />
-                            </template>
-                            <template v-slot:append>
-                            <q-icon
-                                :name="isPwd ? 'visibility_off' : 'visibility'"
-                                class="cursor-pointer"
-                                @click="isPwd = !isPwd"
-                            />
+                            <q-icon name="place" />
                             </template>
                         </q-input>
-                        <q-input class="q-mt-sm" placeholder="City" v-model="form.country">
+
+                         <q-input class="q-mt-sm" placeholder="Town/City" v-model="userData.town">
                             <template v-slot:prepend>
-                            <q-icon name="lock" />
+                            <q-icon name="place" />
                             </template>
                         </q-input>
-                        <q-select class="q-mt-sm" v-model="form.label" :options="options">
+
+                       <q-input class="q-mt-sm" placeholder="Address" v-model="userData.address">
                             <template v-slot:prepend>
-                            <q-icon name="event" />
+                            <q-icon name="place" />
                             </template>
-                        </q-select>
+                        </q-input>
+                        
                         <div class="q-mt-sm">
                             <div>
-                                <q-btn label="Register" no-caps class="q-px-lg" unelevated type="submit" color="primary"/>
+                                <q-btn label="Register" @click="register()" no-caps class="q-px-lg" unelevated type="submit" color="primary"/>
                             </div>
-                            <div class="text-body1 q-mt-sm"><small>Have an account? <span class="text-primary text-bold cursor-pointer" @click="$router.push({ name: 'login'})">Login</span></small></div>
+                          <div class="text-body1 q-mt-sm"><small>Have an account? <span class="text-primary text-bold cursor-pointer" @click="$router.push({ name: 'login'})">Login</span></small></div>
+
                         </div>
                         
                     </form>
@@ -64,43 +62,59 @@
 </template>
 
 <script>
+import {Notify} from 'quasar'
 export default {
-    data () {
+    data () { 
         return {
-            isPwd: true,
+            errors: [],
             accept: false,
             model: '',
             options: [
-                300, 500, 1000
+                'Basic', 'Standard', 'Premium'
             ],
-            form: {
-                first_name: '',
-                last_name: '',
-                email: '',
-                phone_number: '',
-                country: '',
-                label: 300
+    
+            userData: { 
+                username: null,
+                email: null,
+                password: null,
+                passwordComfirmation: null,
+                city: null 
             }
-        }
-    },
-
+            }
+    }, 
     methods: {
-        register () {
-            this.$store.dispatch('Auth/register', this.form)
-            .then(() => {
-                this.$router.push({ name: 'home'})
-                this.$q.notify({
-                message: 'Registration was successful!',
-                color: 'green'
-            })
-            })
-            .catch(error => {
-                if (error.response) {
-                this.$q.notify({message: error.response.data.message, color: 'orange'})
-                }
-            })
-        }
-    }
+        register(){
+            console.log(this.userData)
+            if(this.userData.password != this.userData.passwordComfirmation){
+              Notify.create({message:"Passwords Do not Match",type:'negative',position:'top'})
+
+            }
+            else{
+                this.$store.dispatch('register',this.userData).then(user=>{
+                Notify.create({
+                    spinner: true,
+                    message: 'Registration successfull...',
+                    timeout: 2000,
+                    type:'positive'
+                })
+                this.$router.push("/dashboard")
+                }).catch(error=>{  
+                    console.log(error.response)
+                    if (error.response && error.response.status === 400) {
+                        this.errors = error.response.data.message[0].messages;
+                    }
+
+                // alert(this.errors[0].message)
+                Notify.create({message:this.errors[0].message,type:'negative',position:'top'})
+
+
+                })
+            }
+            
+        },
+
+         
+    },
 }
 </script>
 

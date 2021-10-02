@@ -10,7 +10,7 @@
 <script>
 import Transactions from 'components/common/transactions.vue'
 export default {
-  components: {
+  components: { 
     Transactions
   }
 }

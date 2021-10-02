@@ -5,10 +5,7 @@
 
       <q-page-container>
         <q-page padding class="q-pa-md">
-           <div v-if="user.investments.length<0">
-              <q-btn class="q-px-lg" @click="$router.push({ name: 'newSaving'})"  unelevated label="Start Saving" type="submit" color="primary" no-caps/>
-            </div>
-          <Main />
+          <Savings />
         </q-page>
       </q-page-container>
     </q-layout>
@@ -16,12 +13,12 @@
 </template>
 
 <script>
-import Main from 'components/dashboard'
+import Savings from 'components/dash/savings'
 import SideBar from 'components/SideBar'
 
 export default {
     components: {
-        Main, SideBar
+        Savings, SideBar
     },
     data () {
         return {
@@ -29,25 +26,14 @@ export default {
             drawer2: true 
         }
     },
-    computed: {
-        user(){
-           return this.$store.getters.user
-        },
-
-         userInvestments(){
-           return this.$store.getters.userInvestments
-        },
-       
-    },
         
     methods: {
-      logout () {
+        logout () {
         this.$store.dispatch('logout').then(()=>{
-          this.$router.push({name: 'login'})
+          this.$router.push('/login')
         })
       }
-    },
-    
+    }
 }
 </script>
 

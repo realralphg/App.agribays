@@ -9,6 +9,9 @@ import account from '../components/dash/account'
 import edit from '../components/dash/edit'
 import overview from '../components/dash/overview'
 import profile from '../components/dash/profile'
+import deposit from '../components/dash/deposit'
+
+import newSaving from '../components/dash/newSaving'
 import savings from '../components/dash/savings'
 import food from '../components/dash/food'
 import store from '../components/dash/store'
@@ -25,12 +28,16 @@ components: {
     store,
     profile,
     food,
-    edit
+    edit,
+    overview,
+    newSaving,
+    deposit
 },
 computed: {
     componentId() {
         return this.$route.name
     },
+   
   },
 }
 </script>

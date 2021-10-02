@@ -34,7 +34,7 @@ export default function ({ store}) {
 // })
 
 Router.beforeEach((to, from, next) => {
-  const loggedIn = localStorage.getItem('user-token')
+  const loggedIn = localStorage.getItem('token')
   if(to.matched.some(record => record.meta.requireAtuh) && !loggedIn) {
     next({ name: 'login'})
   } else {

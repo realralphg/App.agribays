@@ -3,15 +3,16 @@
       <div>
             <div>
                 <div class="row">
+                    
                     <div class="col-md-4 col-sm-12 col-xs-12 q-px-md q-mt-sm">
                         <q-card flat bordered class="q-pa-lg">
                             <div class="row">
                                 <div class="col-5">
-                                    <q-avatar size="60px" font-size="32px" color="accent" text-color="primary" icon="account_balance_wallet" />
+                                    <q-avatar size="60px" font-size="32px" color="accent" text-color="primary" icon="topic" />
                                 </div>
                                 <div class="col-7">
-                                    <div class="text-h5 text-bold">Wallet</div>
-                                    <div class="text-body1 text-light" v-if="wallet">{{ wallet.balance }}</div>
+                                    <div class="text-h5 text-bold">Investments</div>
+                                    <div class="text-body1 text-light" >{{ user.investments.length }}</div>
                                 </div>
                             </div>
                         </q-card>
@@ -20,11 +21,11 @@
                         <q-card flat bordered class="q-pa-lg">
                             <div class="row">
                                 <div class="col-5">
-                                    <q-avatar size="60px" font-size="32px" color="accent" text-color="primary" icon="topic" />
+                                    <q-avatar size="60px" font-size="32px" color="accent" text-color="primary" icon="account_balance_wallet" />
                                 </div>
                                 <div class="col-7">
-                                    <div class="text-h5 text-bold">Plan</div>
-                                    <div class="text-body1 text-light" v-if="subscription">{{ subscription[0].plan.name }}</div>
+                                    <div class="text-h5 text-bold">Amount Saved</div>
+                                    <div class="text-body1 text-light" >{{totalInvestment}}</div>
                                 </div>
                             </div>
                         </q-card>
@@ -36,8 +37,8 @@
                                     <q-avatar size="60px" font-size="32px" color="accent" text-color="primary" icon="today" />
                                 </div>
                                 <div class="col-7">
-                                    <div class="text-h5 text-bold">Due Date</div>
-                                    <div class="text-body1 text-light" v-if="subscription">{{ myDate }}</div>
+                                    <div class="text-h5 text-bold">Next Due Date</div>
+                                    <div class="text-body1 text-light" >{{ new Date(user.investments[0].dueDate).toDateString() }}</div>
                                 </div>
                             </div>
                         </q-card>
@@ -53,14 +54,20 @@ import { mapGetters } from 'vuex'
 export default {
     data () {
         return {
-            myDate: ''
+            myDate: '',
+            investments: [],
+            totalInvestment: 0
         }
     },
     computed: {
-        ...mapGetters({
-            subscription: 'Auth/subscription',
-            wallet: 'Auth/wallet'
-        })
+        user(){
+           return this.$store.getters.user
+        },
+
+         userInvestments(){
+           return this.$store.getters.userInvestments
+        },
+       
     },
 
     methods: {
@@ -74,9 +81,19 @@ export default {
         }
     },
 
-    mounted () {
-        this.$store.dispatch('Auth/subscription')
-        this.$store.dispatch('Auth/wallet')
+    async mounted () {
+        await this.$store.dispatch('refreshUser')
+        //this.$store.dispatch('userInvestments')
+       // this.$store.dispatch('Auth/wallet')
+       //console.log("investment data>>>",this.user.investments)
+
+       this.user.investments.forEach(investment=>{
+           console.log(this.totalInvestment,investment.paidAmount)
+           if(investment.paidAmount){
+               this.totalInvestment += investment.paidAmount
+           }
+           
+       })
         this.calcDate()
     }
 }

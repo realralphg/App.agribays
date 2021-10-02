@@ -37,7 +37,7 @@
 
 <script>
 import profile from 'components/account/profile.vue'
-import addresses from 'components/account/address.vue'
+import addresses from 'components/account/address.vue' 
 export default {
     components: {
         profile,
