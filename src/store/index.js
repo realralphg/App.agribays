@@ -33,7 +33,10 @@ export default function (/* { ssrContext } */) {
        plans: [],
        products: [],
        userInvestments: [],
-       userTransactions: []
+       userTransactions: [],
+       users: [],
+       transactions: [],
+       savings: []
     },
 
     getters: {
@@ -43,7 +46,10 @@ export default function (/* { ssrContext } */) {
         products: state => state.products,
         investment: state =>state.investment,
         userInvestments: state =>state.userInvestments,
-        userTransactions: state =>state.userTransactions
+        userTransactions: state =>state.userTransactions,
+        users: state => state.users,
+        savings: state => state.savings,
+        transactions: state => transactions.users
     },
 
     mutations: {
@@ -68,6 +74,15 @@ export default function (/* { ssrContext } */) {
       },
       user_transactions(state,transactions){
         state.userTransactions = transactions
+      },
+      users_fetched(state,users){
+        state.users = users
+      },
+      savings_fetched(state,savings){
+        state.savings = savings
+      },
+      transactions_fetched(state,transactions){
+        state.transactions = transactions
       }
     },
     
@@ -192,6 +207,80 @@ export default function (/* { ssrContext } */) {
           console.log(error);
       });
     })
+  },
+
+  deleteUser({commit},userId){
+    return new Promise((resolve,reject)=>{
+    axios.delete(`${this.getters.apiServer}/users/${userId}`).then(user=>{
+       console.log("User Deleted is>>>",user)
+       resolve("success")
+    }).catch(error=>{
+        reject(error)
+        console.log(error);
+    });
+  })
+},
+
+  getUsers({commit}){
+    return new Promise((resolve,reject)=>{
+    axios.get(`${this.getters.apiServer}/users/`).then(users=>{
+       console.log("Users fetched are is>>>",users)
+       commit('users_fetched', users.data)
+       resolve(users.data)
+    }).catch(error=>{
+        reject(error)
+        console.log(error);
+    });
+   })
+  },
+
+  getSavings({commit}){
+    return new Promise((resolve,reject)=>{
+    axios.get(`${this.getters.apiServer}/investments/`).then(savings=>{
+       console.log("Savings fetched are is>>>",savings)
+       commit('savings_fetched', savings.data)
+            //axios.delete(`${this.getters.apiServer}/investments/45`)
+            console.log("delete")
+       resolve(savings.data)
+    }).catch(error=>{
+        reject(error)
+        console.log(error);
+    });
+   })
+  },
+
+  completeInvestment({commit},investmentId){
+    return new Promise((resolve,reject)=>{
+    axios.put(`${this.getters.apiServer}/investments/${investmentId}`,{status:"completed"}).then(savings=>{
+       console.log("Investment Updated>>>",savings)
+       //commit('savings_fetched', savings.data)
+            //axios.delete(`${this.getters.apiServer}/investments/45`)
+            console.log("delete")
+       resolve(savings.data)
+    }).catch(error=>{
+        reject(error)
+        console.log(error);
+    });
+   })
+  },
+
+  getTransactions({commit}){
+    return new Promise((resolve,reject)=>{
+    axios.get(`${this.getters.apiServer}/transactions/`).then(transactions=>{
+       console.log("transactions fetched are is>>>",transactions)
+      //  transactions.data.forEach(element => {
+      //     if(!element.user || !element.investment){
+      //       console.log("deleted...")
+      //       axios.delete(`${this.getters.apiServer}/transactions/${element.id}`)
+      //     }
+      //  });
+       commit('transactions_fetched', transactions.data)
+       resolve(transactions.data)
+    }).catch(error=>{
+        reject(error)
+        console.log(error);
+    });
+   })
   },
 
     userInvestments({commit},userId){

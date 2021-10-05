@@ -18,8 +18,14 @@ import store from '../components/dash/store'
 import transactions from '../components/dash/transactions'
 import wallet from '../components/dash/wallet'
 import home from '../components/dash/home'
+
+import users from '../components/dash/users'
+import allsavings from '../components/dash/allsavings'
+import alltransactions from '../components/dash/alltransactions'
+import duesavings from '../components/dash/duesavings'
+
 export default {
-components: {
+components: { 
     home,
     savings,
     wallet,
@@ -31,7 +37,11 @@ components: {
     edit,
     overview,
     newSaving,
-    deposit
+    deposit,
+    duesavings,
+    alltransactions,
+    allsavings,
+    users
 },
 computed: {
     componentId() {

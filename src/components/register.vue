@@ -7,7 +7,12 @@
                     <form>
 
                         <div class="text-h4 text-primary text-center text-bold">Create an account</div>
-                        <q-input class="q-mt-sm" placeholder="Full Name" v-model="userData.username" >
+                        <q-input class="q-mt-sm" placeholder="First Name" v-model="userData.fname" >
+                            <template v-slot:prepend>
+                            <q-icon name="person" />
+                            </template>
+                        </q-input>
+                         <q-input class="q-mt-sm" placeholder="Last Name" v-model="userData.lname" >
                             <template v-slot:prepend>
                             <q-icon name="person" />
                             </template>
@@ -90,6 +95,7 @@ export default {
 
             }
             else{
+                this.userData.username = this.userData.fname
                 this.$store.dispatch('register',this.userData).then(user=>{
                 Notify.create({
                     spinner: true,

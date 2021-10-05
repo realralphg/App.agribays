@@ -19,6 +19,10 @@ const routes = [
       { path: '/deposit/:investmentId', name:'deposit', component: () => import('pages/Dashboard.vue'), meta: {requireAtuh: true} },
       { path: '/food-bag', name:'food', component: () => import('pages/Dashboard.vue'), meta: {requireAtuh: true} },
       { path: '/new-saving', name:'newSaving', component: () => import('pages/Dashboard.vue'), meta: {requireAtuh: true} },
+      { path: '/allsavings', name:'allsavings', component: () => import('pages/Dashboard.vue'), meta: {requireAtuh: true} },
+      { path: '/alltransactions', name:'alltransactions', component: () => import('pages/Dashboard.vue'), meta: {requireAtuh: true} },
+      { path: '/duesavings', name:'duesavings', component: () => import('pages/Dashboard.vue'), meta: {requireAtuh: true} },
+      { path: '/users', name:'users', component: () => import('pages/Dashboard.vue'), meta: {requireAtuh: true} },
 
     ]
   },

@@ -76,7 +76,10 @@ export default {
                     timeout: 2000,
                     type:'positive'
                 })
-                this.$router.push("/dashboard")
+                //check role before redirecting
+                    this.$router.push("/dashboard")
+               
+                
                 }).catch(error=>{  
                     console.log(error.response)
                     if (error.response && error.response.status === 400) {

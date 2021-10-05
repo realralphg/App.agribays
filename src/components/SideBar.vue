@@ -16,7 +16,7 @@
         content-class="bg-white"
       >
         <q-scroll-area class="fit q-pt-xl">
-          <q-list>
+          <q-list v-if="user.role.name=='Authenticated'">
             <template>
               <q-item class="q-py-md" clickable v-ripple  @click="$router.push({name: 'account'})">
                 <q-item-section avatar>
@@ -57,28 +57,25 @@
                 </q-item-section>
               </q-item>
             </template>
-            <!-- <template>
-              <q-item class="q-py-sm" clickable v-ripple  @click="$router.push({name: 'store'})">
+         
+            <template>
+              <q-item class="q-py-md position-bottom q-mt-xl" clickable v-ripple @click="logout">
                 <q-item-section avatar>
-                  <q-icon color="primary" name="shop" />
+                  <q-icon color="primary" name="exit_to_app" />
                 </q-item-section>
                 <q-item-section>
-                  Store
+                  Logout
                 </q-item-section>
               </q-item>
-            </template> -->
-            <!-- <template>
-              <q-item class="q-py-md" clickable v-ripple  @click="$router.push({name: 'food'})">
-                <q-item-section avatar>
-                  <q-icon color="primary" name="share" />
-                </q-item-section>
-                <q-item-section>
-                  Food Bag
-                </q-item-section>
-              </q-item>
-            </template> -->
-            <!-- <template>
-              <q-item class="q-py-sm" clickable v-ripple active-class="text-primary"  @click="$router.push({name: 'account'})">
+            </template>
+
+          </q-list>
+
+
+          <!--- ADMIN SIDEBAR --->
+          <q-list v-if="user.role.name=='Admin'">
+            <template>
+              <q-item class="q-py-md" clickable v-ripple  @click="$router.push({name: 'account'})">
                 <q-item-section avatar>
                   <q-icon color="primary" name="person" />
                 </q-item-section>
@@ -86,7 +83,59 @@
                   Account
                 </q-item-section>
               </q-item>
-            </template> -->            
+            </template>
+            <template>
+              <q-item class="q-py-md" clickable v-ripple  @click="$router.push({name: 'home'})">
+                <q-item-section avatar>
+                  <q-icon color="primary" name="dashboard" />
+                </q-item-section>
+                <q-item-section>
+                  Dashboard
+                </q-item-section>
+              </q-item>
+            </template>
+            <template>
+              <q-item class="q-py-md" clickable v-ripple  @click="$router.push({name: 'users'})">
+                <q-item-section avatar>
+                  <q-icon color="primary" name="groups" />
+                </q-item-section>
+                <q-item-section>
+                  Users
+                </q-item-section>
+              </q-item>
+            </template>
+            <template>
+              <q-item class="q-py-md" clickable v-ripple  @click="$router.push({name: 'allsavings'})">
+                <q-item-section avatar>
+                  <q-icon color="primary" name="payment" />
+                </q-item-section>
+                <q-item-section>
+                  All Savings
+                </q-item-section>
+              </q-item>
+            </template>
+
+              <template>
+              <q-item class="q-py-md" clickable v-ripple  @click="$router.push({name: 'duesavings'})">
+                <q-item-section avatar>
+                  <q-icon color="primary" name="date_range" />
+                </q-item-section>
+                <q-item-section>
+                  Due Savings
+                </q-item-section>
+              </q-item>
+            </template>
+            <template>
+              <q-item class="q-py-md" clickable v-ripple  @click="$router.push({name: 'alltransactions'})">
+                <q-item-section avatar>
+                  <q-icon color="primary" name="payments" />
+                </q-item-section>
+                <q-item-section>
+                  Transactions
+                </q-item-section>
+              </q-item>
+            </template>
+         
             <template>
               <q-item class="q-py-md position-bottom q-mt-xl" clickable v-ripple @click="logout">
                 <q-item-section avatar>
@@ -116,7 +165,14 @@ export default {
       logout () {
         this.$store.dispatch('logout')
       }
+    },
+
+    computed: {
+       user(){
+           return this.$store.getters.user
+        },
     }
+
 }
 </script>
 

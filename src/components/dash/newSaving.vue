@@ -98,7 +98,7 @@ export default {
         async createInvestment(){
             this.investmentData.plan = this.investmentData.plan.value
             this.investmentData.product = this.investmentData.product.value
-            this.investmentData.user = [this.$store.getters.user.id]
+            this.investmentData.user = this.$store.getters.user.id
             
             let plan = await this.$store.dispatch('getPlan',this.investmentData.plan)
             let now = new Date();
@@ -107,6 +107,8 @@ export default {
             console.log("Days in this month are>>>",daysInMonth,plan)
             this.investmentData.totalAmount = plan.data.unitAmount * daysInMonth
             this.investmentData.remainingAmount = plan.data.unitAmount * daysInMonth
+            this.investmentData.paidAmount = 0
+
             this.investmentData.dueDate = dueDate;
             console.log("THe Investment to be created is>>>",this.investmentData)
             this.$store.dispatch('createInvestment',this.investmentData).then(investment=>{
@@ -119,9 +121,9 @@ export default {
                 })
                 this.$store.dispatch('refreshUser')
                 let self = this
-                // setTimeout(()=>{
-                //      self.$router.push("/savings")
-                // },2000)
+                setTimeout(()=>{
+                     self.$router.push("/savings")
+                },2000)
                
             }).catch(error=>{  
                     console.log("Error",error)

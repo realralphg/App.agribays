@@ -4,8 +4,8 @@
       <SideBar></SideBar>
 
       <q-page-container>
-        <q-page padding class="q-pa-md">
-           <div v-if="user.investments.length<0">
+        <q-page padding class="q-pa-md" >
+           <div v-if="user.role.name=='Authenticated'">
               <q-btn class="q-px-lg" @click="$router.push({ name: 'newSaving'})"  unelevated label="Start Saving" type="submit" color="primary" no-caps/>
             </div>
           <Main />
