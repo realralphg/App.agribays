@@ -16,9 +16,7 @@
     "axios": "^0.18.1",
     "chart.js": "^2.9.4",
     "core-js": "^3.6.5",
-    "express": "^4.17.1",
     "quasar": "^1.0.0",
-    "serve-static": "^1.14.1",
     "vue": "^2.6.12",
     "vue-chartjs": "^3.5.1",
     "vue-paystack": "^2.0.4"
@@ -29,7 +27,9 @@
     "eslint": "^6.8.0",
     "eslint-config-prettier": "^6.9.0",
     "eslint-loader": "^3.0.3",
-    "eslint-plugin-vue": "^6.1.2"
+    "eslint-plugin-vue": "^6.1.2",
+    "express": "^4.17.1",
+    "serve-static": "^1.14.1"
   },
   "browserslist": [
     "last 10 Chrome versions",
