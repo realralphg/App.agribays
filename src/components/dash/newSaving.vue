@@ -21,7 +21,7 @@
                         
                         <div class="q-mt-sm">
                             <div>
-                                <q-btn label="Submit" @click="createInvestment()"  no-caps class="q-px-lg" unelevated type="submit" color="primary"/>
+                                <q-btn label="Submit" @click.prevent="createInvestment()"  no-caps class="q-px-lg" unelevated type="submit" color="primary"/>
                             </div>
                           <div class="text-body1 q-mt-sm"><small>Find out more about how it works <span class="text-primary text-bold cursor-pointer" @click="$router.push({ name: 'login'})">here</span></small></div>
 
@@ -98,7 +98,7 @@ export default {
         async createInvestment(){
             this.investmentData.plan = this.investmentData.plan.value
             this.investmentData.product = this.investmentData.product.value
-            this.investmentData.user = [this.$store.getters.user.id]
+            this.investmentData.user = this.$store.getters.user.id
             
             let plan = await this.$store.dispatch('getPlan',this.investmentData.plan)
             let now = new Date();

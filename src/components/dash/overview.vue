@@ -38,7 +38,7 @@
                                 </div>
                                 <div class="col-7">
                                     <div class="text-h5 text-bold">Next Due Date</div>
-                                    <div class="text-body1 text-light" >{{ new Date(user.investments[0].dueDate).toDateString() }}</div>
+                                    <div class="text-body1 text-light" v-if="user.investments.length>0" >{{ new Date(user.investments[0].dueDate).toDateString() }}</div>
                                 </div>
                             </div>
                         </q-card>

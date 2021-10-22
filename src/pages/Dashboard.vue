@@ -5,7 +5,7 @@
 
       <q-page-container>
         <q-page padding class="q-pa-md">
-           <div v-if="user.investments.length<0">
+           <div v-if="user.investments.length==0">
               <q-btn class="q-px-lg" @click="$router.push({ name: 'newSaving'})"  unelevated label="Start Saving" type="submit" color="primary" no-caps/>
             </div>
           <Main />

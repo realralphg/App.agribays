@@ -47,7 +47,7 @@
                         
                         <div class="q-mt-sm">
                             <div>
-                                <q-btn label="Register" @click="register()" no-caps class="q-px-lg" unelevated type="submit" color="primary"/>
+                                <q-btn label="Register" @click.prevent="register()" no-caps class="q-px-lg" unelevated type="submit" color="primary"/>
                             </div>
                           <div class="text-body1 q-mt-sm"><small>Have an account? <span class="text-primary text-bold cursor-pointer" @click="$router.push({ name: 'login'})">Login</span></small></div>
 
@@ -121,3 +121,5 @@ export default {
 <style>
 
 </style>
+
+
