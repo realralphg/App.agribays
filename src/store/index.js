@@ -27,7 +27,7 @@ export default function (/* { ssrContext } */) {
     },
 
     state: {
-       apiServer: 'http://localhost:1337',
+       apiServer: 'https://agripays-api2.herokuapp.com',//'http://localhost:1337', //'https://agripays-api2.herokuapp.com', M6EwFFxHUHmN4vq, admin@agribays.com
        token: localStorage.getItem('token') || '',
        user : localStorage.getItem('user') || null,
        plans: [],

@@ -9,6 +9,9 @@
  *
  * Boot files are your "main.js"
  **/
+
+
+
 import Vue from 'vue'
 import './import-quasar.js'
 
@@ -23,16 +26,6 @@ import createRouter from 'app/src/router/index'
 
 
 
-Vue.filter('toCurrency', function (value) {
-  if (typeof value !== "number") {
-      return value;
-  }
-  var formatter = new Intl.NumberFormat('en-US', {
-    
-      minimumFractionDigits: 0
-  });
-  return formatter.format(value);
-});
 
 export default async function () {
   // create store and router instances
