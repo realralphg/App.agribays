@@ -4,5 +4,6 @@
   "eslint.validate": ["javascript", "javascriptreact", "typescript", "vue"],
   
   "vetur.experimental.templateInterpolationService": true,
-  "git.ignoreLimitWarning": true
+  "git.ignoreLimitWarning": true,
+  "liveServer.settings.port": 5501
 }
