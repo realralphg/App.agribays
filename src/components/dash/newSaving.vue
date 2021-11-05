@@ -20,9 +20,17 @@
                         </q-select>
                         
                         <div class="q-mt-sm">
-                            <div>
+                            <div v-if="!loading">
                                 <q-btn label="Submit" @click.prevent="createInvestment()"  no-caps class="q-px-lg" unelevated type="submit" color="primary"/>
                             </div>
+                             <span v-else>  <q-circular-progress
+      indeterminate
+      size="45px"
+      :thickness="1"
+      color="grey-8"
+      track-color="green"
+      class="q-ma-md"
+    /> Please Wait...  </span>
                           <div class="text-body1 q-mt-sm"><small>Find out more about how it works <span class="text-primary text-bold cursor-pointer" @click="$router.push({ name: 'login'})">here</span></small></div>
 
                         </div>
@@ -48,6 +56,7 @@ export default {
             full_name: null,
             email:null,
             showBag: false,
+            loading:false,
             investmentData: {
                 paidAmount: null,
                 remainingAmount: null,
@@ -96,6 +105,7 @@ export default {
  
     methods: {
         async createInvestment(){
+            this.loading = true
             this.investmentData.plan = this.investmentData.plan.value
             this.investmentData.product = this.investmentData.product.value
             this.investmentData.user = this.$store.getters.user.id
@@ -127,6 +137,7 @@ export default {
                
             }).catch(error=>{  
                     console.log("Error",error)
+
                     if (error.response && error.response.status === 400) {
                         this.errors = error.response.data.message[0].messages;
                     }
@@ -134,6 +145,7 @@ export default {
                 // alert(this.errors[0].message)
                 Notify.create({message:this.errors[0].message,type:'negative',position:'top'})
 
+                                this.loading = true
 
                 })
             

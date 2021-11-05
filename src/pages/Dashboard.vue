@@ -5,7 +5,7 @@
 
       <q-page-container>
         <q-page padding class="q-pa-md" >
-           <div v-if="user.role.name=='Authenticated'">
+           <div v-if="user.role.name=='Authenticated' && user.investments.length==0 && this.$route.name != 'account' && this.$route.name != 'edit'">
               <q-btn class="q-px-lg" @click="$router.push({ name: 'newSaving'})"  unelevated label="Start Saving" type="submit" color="primary" no-caps/>
             </div>
           <Main />
@@ -47,6 +47,10 @@ export default {
         })
       }
     },
+
+    mounted(){
+      console.log("Name",this.$route.name)
+    }
     
 }
 </script>

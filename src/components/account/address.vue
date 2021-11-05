@@ -16,9 +16,17 @@
                         <q-input outlined dense bg-color="white" v-model="userData.address" label="Address" />
                     </div>
                 </div>
-                <div class="q-pa-md"> 
+                <div class="q-pa-md" v-if="!loading"> 
                     <q-btn @click="update()" unelevated color="primary" label="Update Address" no-caps />
                 </div>
+                  <span v-else>  <q-circular-progress
+      indeterminate
+      size="45px"
+      :thickness="1"
+      color="grey-8"
+      track-color="green"
+      class="q-ma-md"
+    /> Please Wait...  </span>
             </div> 
         </form>
     </section>
@@ -35,12 +43,16 @@ export default {
             state: '',
             address2: '',
             address1: '',
-            userData: {}
+            userData: {},
+            loading:false
         }
     },
     methods: {
           update(){
+              this.loading = true
              this.$store.dispatch('updateUser',this.userData).then(user=>{
+               this.loading = false
+
                 Notify.create({
                     spinner: true,
                     message: 'Update successfull...',
@@ -55,6 +67,7 @@ export default {
 
                 // alert(this.errors[0].message)
                 Notify.create({message:this.errors[0].message,type:'negative',position:'top'})
+                  this.loading = false
 
 
                 })

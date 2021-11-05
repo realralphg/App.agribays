@@ -51,9 +51,17 @@
                         </q-input>
                         
                         <div class="q-mt-sm">
-                            <div>
+                            <div v-if="!loading">
                                 <q-btn label="Register" @click.prevent="register()" no-caps class="q-px-lg" unelevated type="submit" color="primary"/>
                             </div>
+                              <span v-else>  <q-circular-progress
+      indeterminate
+      size="45px"
+      :thickness="1"
+      color="grey-8"
+      track-color="green"
+      class="q-ma-md"
+    /> Please Wait...  </span>
                           <div class="text-body1 q-mt-sm"><small>Have an account? <span class="text-primary text-bold cursor-pointer" @click="$router.push({ name: 'login'})">Login</span></small></div>
 
                         </div>
@@ -74,6 +82,7 @@ export default {
             errors: [],
             accept: false,
             model: '',
+            loading: false,
             options: [
                 'Basic', 'Standard', 'Premium'
             ],
@@ -90,9 +99,10 @@ export default {
     methods: {
         register(){
             console.log(this.userData)
+            this.loading = true
             if(this.userData.password != this.userData.passwordComfirmation){
               Notify.create({message:"Passwords Do not Match",type:'negative',position:'top'})
-
+              this.loading = false
             }
             else{
                 this.userData.username = this.userData.fname
@@ -104,6 +114,7 @@ export default {
                     type:'positive'
                 })
                 this.$router.push("/dashboard")
+
                 }).catch(error=>{  
                     console.log(error.response)
                     if (error.response && error.response.status === 400) {
@@ -112,7 +123,7 @@ export default {
 
                 // alert(this.errors[0].message)
                 Notify.create({message:this.errors[0].message,type:'negative',position:'top'})
-
+                this.loading = false
 
                 })
             }

@@ -16,10 +16,19 @@
                             <q-icon name="lock" />
                             </template>
                         </q-input>
+                       
                         <div class="q-mt-xl">
-                            <div>
-                                <q-btn class="q-px-lg" @click="login()" unelevated label="Login" type="submit" color="primary" no-caps/>
+                            <div v-if="!loading">
+                                <q-btn  class="q-px-lg" @click="login()" unelevated label="Login" type="submit" color="primary" no-caps/>
                             </div>
+                           <span v-else>  <q-circular-progress
+      indeterminate
+      size="45px"
+      :thickness="1"
+      color="grey-8"
+      track-color="green"
+      class="q-ma-md"
+    /> Please Wait...  </span>
                             <div class="text-body1 q-mt-sm"><small>Don't have an account? <span class="text-primary text-bold cursor-pointer" @click="$router.push({ name: 'register'})">Register</span></small></div>
                             
                         </div>
@@ -40,6 +49,7 @@ export default {
         return {
             isPwd: true,
             accept: false,
+            loading: false,
             userData: {
                 identifier: '',
                 password: ''
@@ -65,8 +75,10 @@ export default {
         // },
         login(){
             console.log(this.userData)
+            this.loading = true;
             if(this.userData.identifier == '' || this.userData.password == ''){
               Notify.create({message:"Enter Username and Password",type:'negative',position:'top'})
+                          this.loading = false;
             }
             else{
                 this.$store.dispatch('login',this.userData).then(user=>{
@@ -88,6 +100,7 @@ export default {
 
                 // alert(this.errors[0].message)
                 Notify.create({message:this.errors[0].message,type:'negative',position:'top'})
+                                          this.loading = false;
 
 
                 })

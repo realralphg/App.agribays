@@ -6,13 +6,15 @@ export default {
   name: 'activityChart',
   data() {
     return {
+      investments: [],
       chartdata: {
-        labels: ['Nov 13', 'Nov 14', 'Nov 15', 'Nov 16', 'Nov 17', 'Nov 18', 'Nov 19', 'Nov 20', 'Nov 21', 'Nov 22', 'Nov 23', 'Nov 24',],
+        labels: ["January","February","March","April","May","June","July",
+        "August","September","October","November","December"],
         datasets: [
           {
             label: 'A',
             backgroundColor: '#2B945B',
-            data: [250000, 150000, 200000, 70000, 250000, 350000, 280000, 80000, 150000, 290000, 250000, 250000, 50000, 90000]
+            data: [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0]
           },
         ]
       },
@@ -24,8 +26,47 @@ export default {
       }
     }
   },
+  computed: {
+    user(){
+       return this.$store.getters.user
+    },
+    userInvestments(){
+      return this.$store.getters.userInvestments
+   },
+  },
   mounted() {
-    this.renderChart(this.chartdata, this.options)
-  }
+    
+    if(this.user.role.name=='Authenticated'){
+      this.$store.dispatch("userInvestments",this.$store.getters.user.id).then(async (investments)=>{
+        this.investments = investments
+        console.log("Investments>>>>",this.investments)
+        await this.investments.forEach(investment=>{
+            let date = new Date(investment.created_at)
+            let month = date.getMonth()
+            this.chartdata.datasets[0].data[month-1] = investment.paidAmount
+            console.log("HELLO A",this.chartdata.datasets[0].data)
+
+        })
+        this.renderChart(this.chartdata, this.options)
+     })
+    }
+
+    else if(this.user.role.name=='Admin'){
+      this.$store.dispatch("getSavings").then(async (investments)=>{
+        this.investments = investments
+        console.log("Investments>>>>",this.investments)
+        await this.investments.forEach(investment=>{
+            let date = new Date(investment.created_at)
+            let month = date.getMonth()
+            this.chartdata.datasets[0].data[month-1] = investment.paidAmount
+            console.log("HELLO A",this.chartdata.datasets[0].data)
+        })
+        this.renderChart(this.chartdata, this.options)
+     })
+    }
+    
+   
+  },
+  
 }
 
